@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Instructor;
 use App\Models\major;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class InstructorsController extends Controller
@@ -16,7 +17,7 @@ class InstructorsController extends Controller
         $title = "Data Instructors";
 
         // eager load roles
-        $datas = Instructor::with('majors', 'user')->get();
+        $datas = Instructor::with('majors', '')->get();
 
         return view('instructors.index', compact('title', 'datas'));
     }
@@ -26,7 +27,9 @@ class InstructorsController extends Controller
      */
     public function create()
     {
-        return view('majors.create');
+        $users = User::doesntHave('roles')->get();
+        $majors = Major::all();
+        return view('instructors.create', compact('users', 'majors'));
     }
 
     /**
@@ -34,19 +37,24 @@ class InstructorsController extends Controller
      */
     public function store(Request $request)
     {
-        $Instructor = Instructor::create([
+
+        $photoPath = null;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('photos', 'public');
+        }
+
+        $instructor = Instructor::create([
+            'user_id' => $request->user_id,
             'title' => $request->title,
             'gender' => $request->gender,
             'address' => $request->address,
             'phone' => $request->phone,
-            'photo' => $request->file('photo')->store('photos'),
+            'photo' => $photoPath,
             'is_active' => $request->is_active,
         ]);
 
-        $Instructor->majors()->attach($request->majors_id);
-        $Instructor->user()->attach($request->user_id);
-
-        return redirect()->route('majors.index');
+        $instructor->majors()->attach($request->majors_id);
+        return redirect()->route('instructors.index');
     }
 
     /**

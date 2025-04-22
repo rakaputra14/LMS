@@ -10,6 +10,8 @@ class major extends Model
         'name',
         'is_active'
     ];
+
+
     public function instructors()
     {
         return $this->belongsToMany(Instructor::class, 'instructor_major', 'major_id', 'instructor_id');
