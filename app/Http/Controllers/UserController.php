@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Roles;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -28,7 +29,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Roles::where('is_active', 1)->get();
+        $roles = Role::where('is_active', 1)->get();
         return view('users.create', compact('roles'));
     }
 
@@ -61,8 +62,10 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        $edit = User::find($id);
-        return view('users.edit', compact('edit'));
+        $edit = User::with('roles')->findOrFail($id);
+        $roles = Role::all();
+        // return $roles;
+        return view('users.edit', compact('edit', 'roles'));
     }
 
     /**
@@ -70,12 +73,18 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        User::where('id', $id)->update([
+        $user = User::findOrFail($id);
+
+        $user->update([
             'name' => $request->name,
             'email' => $request->email,
+            'is_active' => $request->is_active,
             'password' => bcrypt($request->password),
         ]);
 
+        if ($request->has('roles')) {
+            $user->roles()->sync($request->roles);
+        }
         return redirect()->to('users');
     }
 

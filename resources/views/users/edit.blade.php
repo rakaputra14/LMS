@@ -26,9 +26,28 @@
                                     required value="{{ $edit->password }}">
                             </div>
                             <div class="mb-3">
+                                <label class="form-label">Status</label>
+                                <select name="is_active" class="form-select">
+                                    <option value="1" {{ $edit->is_active ? 'selected' : '' }}>Active</option>
+                                    <option value="0" {{ !$edit->is_active ? 'selected' : '' }}>Inactive</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Roles *</label>
+                                <select name="roles" class="form-select" required>
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->id }}" {{ $edit->roles->contains('id', $role->id) ? 'selected' : '' }}>
+                                            {{ $role->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
                                 <button type="submit" class="btn btn-primary">Save</button>
                                 <button type="reset" class="btn btn-danger">Cancel</button>
                                 <a href="{{ url()->previous() }}" class="text-primary">Back</a>
+                            </div>
                         </form>
                     </div>
                 </div>

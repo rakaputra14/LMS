@@ -2,23 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Instructor;
 use App\Models\major;
 use Illuminate\Http\Request;
 
-class InstructorsController extends Controller
+class MajorController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $title = "Data Instructors";
+        $title = "Data Jurusan";
+        $datas = major::get();
 
-        // eager load roles
-        $datas = Instructor::with('majors', 'user')->get();
+        // return $datas;
 
-        return view('instructors.index', compact('title', 'datas'));
+        return view('majors.index', compact('title', 'datas'));
     }
 
     /**
@@ -34,17 +33,10 @@ class InstructorsController extends Controller
      */
     public function store(Request $request)
     {
-        $Instructor = Instructor::create([
-            'title' => $request->title,
-            'gender' => $request->gender,
-            'address' => $request->address,
-            'phone' => $request->phone,
-            'photo' => $request->file('photo')->store('photos'),
+        major::create([
+            'name' => $request->name,
             'is_active' => $request->is_active,
         ]);
-
-        $Instructor->majors()->attach($request->majors_id);
-        $Instructor->user()->attach($request->user_id);
 
         return redirect()->route('majors.index');
     }
@@ -62,7 +54,8 @@ class InstructorsController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $edit = major::find($id);
+        return view('majors.edit', compact('edit'));
     }
 
     /**
@@ -70,7 +63,11 @@ class InstructorsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        major::where('id', $id)->update([
+            'name' => $request->name,
+            'is_active' => $request->is_active,
+        ]);
+        return redirect()->route('majors.index');
     }
 
     /**
@@ -78,6 +75,8 @@ class InstructorsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        major::where('id', $id)->delete();
+
+        return redirect()->route('majors.index');
     }
 }

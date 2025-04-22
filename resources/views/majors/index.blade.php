@@ -10,39 +10,32 @@
                         <h5 class="card-title">{{ $title ?? '' }}</h5>
                         <div class="mt4 mb-3">
                             <div align="right" class="mb-3">
-                                <a class="btn btn-primary" href="{{ route('users.create') }}">Add Users</a>
+                                <a class="btn btn-primary" href="{{ route('majors.create') }}">Tambah Jurusan</a>
                             </div>
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Roles</th>
                                         <th>Name</th>
-                                        <th>Email</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($datas as $user)
+                                    @foreach($datas as $data)
                                         <tr>
+                                            <td>{{ $data->name }}</td>
                                             <td>
-                                                @foreach($user->roles as $role)
-                                                    <span class="badge bg-info">{{ $role->name }}</span>
-                                                @endforeach
-                                            </td>
-                                            <td>{{ $user->name }}</td>
-                                            <td>{{ $user->email }}</td>
-                                            <td>
-                                                @if($user->is_active)
+                                                @if($data->is_active)
                                                     <span class="badge bg-success">Active</span>
                                                 @else
                                                     <span class="badge bg-secondary">Inactive</span>
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-secondary">
+                                                <a href="{{ route('majors.edit', $data->id) }}"
+                                                    class="btn btn-sm btn-secondary">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
-                                                <form class="d-inline" action="{{ route('users.destroy', $user->id) }}"
+                                                <form class="d-inline" action="{{ route('majors.destroy', $data->id) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('DELETE')

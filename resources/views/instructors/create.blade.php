@@ -6,11 +6,11 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Add New Users</h5>
+                        <h5 class="card-title">Add New Instruktur</h5>
                         <form action="{{ route('users.store') }}" method="post">
                             @csrf
                             <div class="mb-3">
-                                <label for="" class="col-form-label">User Name *</label>
+                                <label for="" class="col-form-label">Nama *</label>
                                 <input type="text" class="form-control" name="name" placeholder="Enter Your Name" required>
                             </div>
                             <div class="mb-3">
@@ -27,7 +27,7 @@
                                 <label for="" class="col-form-label">Select Role(s) *</label>
                                 <select name="roles" class="form-select" required>
                                     @foreach($roles as $role)
-                                        <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                        <option value="{{ $role->id[1] }}">{{ $role->name }}</option>
                                     @endforeach
                                 </select>
                             </div>

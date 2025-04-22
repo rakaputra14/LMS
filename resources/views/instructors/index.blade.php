@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'Data Users')
+@section('title', 'Data Instruktur')
 
 @section('content')
     <section class="section">
@@ -10,35 +10,44 @@
                         <h5 class="card-title">{{ $title ?? '' }}</h5>
                         <div class="mt4 mb-3">
                             <div align="right" class="mb-3">
-                                <a class="btn btn-primary" href="{{ route('users.create') }}">Add Users</a>
+                                <a class="btn btn-primary" href="{{ route('instructors.create') }}">Tambah Instruktur</a>
                             </div>
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Roles</th>
                                         <th>Name</th>
-                                        <th>Email</th>
+                                        <th>Title</th>
+                                        <th>Kelamin</th>
+                                        <th>Alamat</th>
+                                        <th>Telepon</th>
+                                        <th>Photo</th>
                                         <th>Status</th>
+                                        <th>Jurusan</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($datas as $user)
+                                    @foreach($datas as $data)
                                         <tr>
+                                            <td>{{ $data->user->name }}</td>
+                                            <td>{{ $data->title }}</td>
+                                            <td>{{ $data->gender }}</td>
+                                            <td>{{ $data->address }}</td>
+                                            <td>{{ $data->phone }}</td>
                                             <td>
-                                                @foreach($user->roles as $role)
-                                                    <span class="badge bg-info">{{ $role->name }}</span>
-                                                @endforeach
+                                                @if($data->photo)
+                                                    <img src="{{ asset('storage/'.$data->photo) }}" alt="Photo" width="50" height="50">
+                                                @else
+                                                    <span>No Photo</span>
+                                                @endif
                                             </td>
-                                            <td>{{ $user->name }}</td>
-                                            <td>{{ $user->email }}</td>
                                             <td>
-                                                @if($user->is_active)
+                                                @if($data->is_active)
                                                     <span class="badge bg-success">Active</span>
                                                 @else
                                                     <span class="badge bg-secondary">Inactive</span>
                                                 @endif
                                             </td>
-
+                                            <td>{{ $data->majors->pluck('name')->implode(', ') }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
