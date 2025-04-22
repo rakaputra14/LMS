@@ -12,8 +12,8 @@ class major extends Model
     ];
 
 
-    public function instructors()
+    public function users()
     {
-        return $this->belongsToMany(Instructor::class, 'instructor_major', 'major_id', 'instructor_id');
+        return $this->belongsToMany(User::class, 'majors_detail', 'majors_id', 'user_id');
     }
 }

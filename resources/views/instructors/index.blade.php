@@ -30,7 +30,7 @@
                                         <tr>
                                             <td>{{ $data->user->name }}</td>
                                             <td>{{ $data->title }}</td>
-                                            <td>{{ $data->gender }}</td>
+                                            <td>{{ $data->gender == 1 ? 'Laki-Laki' : 'Perempuan' }}</td>
                                             <td>{{ $data->address }}</td>
                                             <td>{{ $data->phone }}</td>
                                             <td>
@@ -41,13 +41,34 @@
                                                 @endif
                                             </td>
                                             <td>
+                                                @if ($data->user && $data->user->majors->count())
+                                                    @foreach ($data->user->majors as $major)
+                                                        <span class="badge bg-info">{{ $major->name }}</span>
+                                                    @endforeach
+                                                @else
+                                                    <span class="text-muted">No Major</span>
+                                                @endif
+                                            </td>
+                                            <td>
                                                 @if($data->is_active)
                                                     <span class="badge bg-success">Active</span>
                                                 @else
                                                     <span class="badge bg-secondary">Inactive</span>
                                                 @endif
                                             </td>
-                                            <td>{{ $data->majors->pluck('name')->implode(', ') }}</td>
+                                            <td>
+                                                <a href="{{ route('instructors.edit', $data->id) }}" class="btn btn-sm btn-secondary">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <form class="d-inline" action="{{ route('instructors.destroy', $data->id) }}"
+                                                    method="post">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>

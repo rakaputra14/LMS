@@ -20,7 +20,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Title</label>
+                                <label class="form-label">Gelar</label>
                                 <input type="text" name="title" class="form-control" required>
                             </div>
 
